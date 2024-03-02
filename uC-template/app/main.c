@@ -28,7 +28,7 @@ int main( void )
 
     __HAL_RCC_GPIOC_CLK_ENABLE( );
 
-    GPIO_InitStruct.Pin   = GPIO_PIN_0;
+    GPIO_InitStruct.Pin   = GPIO_PIN_0 | GPIO_PIN_1;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -37,10 +37,11 @@ int main( void )
 
     for( ; ; )
     {
-        //HAL_GPIO_TogglePin( GPIOC, GPIO_PIN_12);
         HAL_GPIO_WritePin( GPIOC, GPIO_PIN_0, SET);
+        HAL_GPIO_WritePin( GPIOC, GPIO_PIN_1, RESET);
         HAL_Delay( 200u );
         HAL_GPIO_WritePin( GPIOC, GPIO_PIN_0, RESET);
+        HAL_GPIO_WritePin( GPIOC, GPIO_PIN_1, SET);
         HAL_Delay( 100u );
     }
 
