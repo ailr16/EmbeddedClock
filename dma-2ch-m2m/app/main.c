@@ -1,34 +1,31 @@
-/**
- * @file    main.c
- * @brief   **Template Application entry point**
- *
- * The main file is the entry point of the application or any user code, please provide the 
- * proper description of this file according to your own implementation
- * This Demo app only blinks an LED connected to PortA Pin 5
- *
- * @note    Only the files inside folder app will be take them into account when the 
- *          doxygen runs by typing "make docs", index page is generated in
- *          Build/doxigen/html/index.html
- */
 #include "app_bsp.h"
 
-/**
- * @brief   **Application entry point**
- *
- * Ptovide the proper description for function main according to your own
- * implementation
- *
- * @retval  None
- */
+extern void initialise_monitor_handles(void);
 
-DMA_HandleTypeDef DMAHandler;
+
+DMA_HandleTypeDef DMAHandler = { 0 };
+
+#define BUFFER_SIZE 32 
+
+static uint32_t Buffer[BUFFER_SIZE];
+static const uint32_t DataSource[BUFFER_SIZE] =
+{
+  0x01020304, 0x05060708, 0x090A0B0C, 0x0D0E0F10,
+  0x11121314, 0x15161718, 0x191A1B1C, 0x1D1E1F20,
+  0x21222324, 0x25262728, 0x292A2B2C, 0x2D2E2F30,
+  0x31323334, 0x35363738, 0x393A3B3C, 0x3D3E3F40,
+  0x41424344, 0x45464748, 0x494A4B4C, 0x4D4E4F50,
+  0x51525354, 0x55565758, 0x595A5B5C, 0x5D5E5F60,
+  0x61626364, 0x65666768, 0x696A6B6C, 0x6D6E6F70,
+  0x71727374, 0x75767778, 0x797A7B7C, 0x7D7E7F80
+};
 
 int main( void )
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
-    DMA_HandleTypeDef DmaHandler;
 
     HAL_Init( );
+    initialise_monitor_handles();
 
     __HAL_RCC_GPIOC_CLK_ENABLE( );
 
@@ -39,18 +36,26 @@ int main( void )
     
     HAL_GPIO_Init( GPIOC, &GPIO_InitStruct );
 
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
     DMAHandler.Instance                 = DMA1_Channel1;
-    DmaHandler.Init.Request             = DMA_REQUEST_MEM2MEM;
+    DMAHandler.Init.Request             = DMA_REQUEST_MEM2MEM;
     DMAHandler.Init.Direction           = DMA_MEMORY_TO_MEMORY;
-    DmaHandler.Init.PeriphInc           = DMA_PINC_ENABLE;
-    DmaHandler.Init.MemInc              = DMA_MINC_ENABLE;
-    DmaHandler.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-    DmaHandler.Init.MemDataAlignment    = DMA_MDATAALIGN_WORD;
-    DmaHandler.Init.Mode                = DMA_NORMAL;
-    DmaHandler.Init.Priority            = DMA_PRIORITY_LOW;
+    DMAHandler.Init.PeriphInc           = DMA_PINC_ENABLE;
+    DMAHandler.Init.MemInc              = DMA_MINC_ENABLE;
+    DMAHandler.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    DMAHandler.Init.MemDataAlignment    = DMA_MDATAALIGN_WORD;
+    DMAHandler.Init.Mode                = DMA_NORMAL;
+    DMAHandler.Init.Priority            = DMA_PRIORITY_LOW;
+    HAL_DMA_Init( &DMAHandler );
+    
+    HAL_DMA_Start( &DMAHandler, (uint32_t)&DataSource, (uint32_t)&Buffer, BUFFER_SIZE );
+    HAL_Delay( 500u );
 
-    HAL_DMA_Init( &DmaHandler );
-
+    for( uint32_t i = 0; i < BUFFER_SIZE; i++ )
+    {
+        printf("%x\n", Buffer[i]);
+    }
 
     for( ; ; )
     {
