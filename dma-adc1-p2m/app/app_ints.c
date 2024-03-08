@@ -43,3 +43,12 @@ void SysTick_Handler( void )
 {
     HAL_IncTick( );
 }
+
+extern DMA_HandleTypeDef Dma1HandlerCh1;
+
+/*Declare DMA interrupt service rutine as it is declare in startup_stm32g0b1xx.s file*/
+void DMA1_Channel1_IRQHandler(void)
+{
+    /*HAL library functions that attend interrupt on DMA*/
+    HAL_DMA_IRQHandler( &Dma1HandlerCh1 );
+}
