@@ -1,0 +1,8 @@
+*.ld
+makefile
+*.json
+*.svd
+.doxyfile
+.gdbinit
+.misra
+.msupress
