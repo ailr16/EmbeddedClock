@@ -12,7 +12,7 @@ uint32_t conversionComplete;
 DMA_HandleTypeDef Dma1HandlerCh1;
 
 /* Handler for ADC1 */
-ADC_HandleTypeDef      AdcHandler;
+ADC_HandleTypeDef AdcHandler;
 
 /* Handler for ADC1 Channel 0*/
 ADC_ChannelConfTypeDef AdcChannelConfig;
@@ -45,22 +45,22 @@ int main( void )
     HAL_NVIC_EnableIRQ( DMA1_Channel1_IRQn );
 
     /* Configure ADC */
-    __HAL_LINKDMA( &AdcHandler, DMA_Handle, Dma1HandlerCh1 );           /* Link DMA Handler to ADC Handler*/
-    AdcHandler.Instance                   = ADC1;                       /* Use ADC1 Peripheral */
-    AdcHandler.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV2;   /* APB clock divided by two*/
-    AdcHandler.Init.Resolution            = ADC_RESOLUTION8b;           /* 8 bit resolution with a Tconv of 8.5*/
-    AdcHandler.Init.ScanConvMode          = ADC_SCAN_SEQ_FIXED;         /* Scan adc channels from 0 to 16 in that order*/
-    AdcHandler.Init.DataAlign             = ADC_DATAALIGN_RIGHT;        /* data converter is right alightned*/
-    AdcHandler.Init.SamplingTimeCommon1   = ADC_SAMPLETIME_1CYCLE_5;    /* sampling time of 1.5*/
-    AdcHandler.Init.ExternalTrigConv      = ADC_SOFTWARE_START;         /* software trigger*/
-    AdcHandler.Init.EOCSelection          = ADC_EOC_SINGLE_CONV;        /* only applicable on ISR*/
-    AdcHandler.Init.Overrun               = ADC_OVR_DATA_OVERWRITTEN;   /* data will be overwriten in case is not read it*/
-    AdcHandler.Init.DMAContinuousRequests = ENABLE;
+    __HAL_LINKDMA( &AdcHandler, DMA_Handle, Dma1HandlerCh1 );           /* Link DMA Handler to ADC Handler              */
+    AdcHandler.Instance                   = ADC1;                       /* Use ADC1 Peripheral                          */
+    AdcHandler.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV2;   /* APB clock divided by two                     */
+    AdcHandler.Init.Resolution            = ADC_RESOLUTION8b;           /* 8 bit resolution                             */
+    AdcHandler.Init.ScanConvMode          = ADC_SCAN_SEQ_FIXED;         /* Scan ADC channels ordered from 0 to 16       */
+    AdcHandler.Init.DataAlign             = ADC_DATAALIGN_RIGHT;        /* Right aligned conversion result              */
+    AdcHandler.Init.SamplingTimeCommon1   = ADC_SAMPLETIME_1CYCLE_5;    /* Sampling time of 1.5 clock cycles            */
+    AdcHandler.Init.ExternalTrigConv      = ADC_SOFTWARE_START;         /* Conversion triggered by software             */
+    AdcHandler.Init.EOCSelection          = ADC_EOC_SINGLE_CONV;        /* Flag for single conversion                   */
+    AdcHandler.Init.Overrun               = ADC_OVR_DATA_OVERWRITTEN;   /* Data will be overwriten in case was not read */
+    AdcHandler.Init.DMAContinuousRequests = ENABLE;                     /* Unlimited DMA transfers for continuous mode  */
     HAL_ADC_Init( &AdcHandler );
 
-    AdcChannelConfig.Channel      = ADC_CHANNEL_0;
-    AdcChannelConfig.Rank         = ADC_RANK_CHANNEL_NUMBER;
-    AdcChannelConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1; 
+    AdcChannelConfig.Channel      = ADC_CHANNEL_0;                      /* Use ADC Channel 0                             */
+    AdcChannelConfig.Rank         = ADC_RANK_CHANNEL_NUMBER;            /* Rank 0 for Ch0, rank 1 for Ch1 ...            */
+    AdcChannelConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;          /* Use sampling time common 1 (1.5 clock cycles) */
     HAL_ADC_ConfigChannel( &AdcHandler, &AdcChannelConfig );
 
     HAL_ADCEx_Calibration_Start( &AdcHandler );
@@ -70,13 +70,10 @@ int main( void )
 
     while (1)
     {
-        //HAL_ADC_Start( &AdcHandler );                /*trigger conversion*/
-        //HAL_ADC_PollForConversion( &AdcHandler, 1u );/*wait untill conversion is performed, around 1.25us*/
-        //value = HAL_ADC_GetValue( &AdcHandler );     /*read the digital value*/
-
         if( conversionComplete )
         {
-            printf( "Pot value: %lu\r\n", buffer1[ 0u ] );      /*print the adc value*/
+            /* Print the ADC value when a conversion has been done */
+            printf( "Pot value: %lu\r\n", buffer1[ 0u ] );
             conversionComplete = 0;
             HAL_ADC_Start_DMA( &AdcHandler, (uint32_t*)buffer1, BUFFER1_SIZE );
         }
@@ -85,6 +82,7 @@ int main( void )
     return 0u;
 }
 
+/* Callback when a conversion has been performed */
 void HAL_ADC_ConvCpltCallback( ADC_HandleTypeDef *hadc )
 {
     conversionComplete = 1u;
