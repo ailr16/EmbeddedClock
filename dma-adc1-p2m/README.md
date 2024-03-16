@@ -1,4 +1,4 @@
-DMA: Two channels memory to memory
+DMA: One channel peripheral (ADC) to memory
 ============
 
-Transfer data from flash memory to RAM using two DMA channels in STM32G0 microcontroller
+Transfer data from ADC1 peripheral to RAM using a DMA channel in STM32G0 microcontroller
