@@ -57,8 +57,28 @@ int q39(void)
     printf("%d %d\n", n, !n);
 }
 
+int ai[] = {10, 20, 30, 40, 50};
+int *change()
+{
+    static int n;
+    static int m;
+    for(; n < 3; n++)
+    {
+        m = 1;
+        return ai + n;
+    }
+}
+
+int q50(void)
+{
+    *change() = 100;
+    *change() = 200;
+    *change() = 300;
+    printf("%d %d %d %d %d", ai[0], ai[1], ai[2], ai[3], ai[4]);
+}
+
 int main(void)
 {
-    q39();
+    q50();
     return 0;
 }
