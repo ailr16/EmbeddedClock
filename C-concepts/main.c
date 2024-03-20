@@ -10,8 +10,17 @@ int q8(void)
     return 0;
 }
 
+int q22(void)
+{
+    unsigned int r;
+    r = 1;
+    printf("%d\t%x\t%x\n", r > -4, r, -4);
+    for( r = 1; r > -4; r-- )
+        printf("Welcome");
+}
+
 int main(void)
 {
-    q8();   
+    q22();   
     return 0;
 }
