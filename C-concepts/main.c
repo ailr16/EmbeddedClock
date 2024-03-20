@@ -51,8 +51,14 @@ int q32(void)
     return 0;
 }
 
+int q39(void)
+{
+    int n = -20;
+    printf("%d %d\n", n, !n);
+}
+
 int main(void)
 {
-    q32();   
+    q39();
     return 0;
 }
