@@ -43,9 +43,16 @@ int q24(void)
     return 0;
 }
 
+int q32(void)
+{
+    char c = 100;
+    printf("%x", c % 9);
+
+    return 0;
+}
 
 int main(void)
 {
-    q24();   
+    q32();   
     return 0;
 }
