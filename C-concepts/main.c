@@ -37,8 +37,15 @@ int q23(void)
     return 0;
 }
 
+int q24(void)
+{
+    printf("%d", printf("Welcome"));
+    return 0;
+}
+
+
 int main(void)
 {
-    q23();   
+    q24();   
     return 0;
 }
