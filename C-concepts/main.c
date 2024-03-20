@@ -17,10 +17,28 @@ int q22(void)
     printf("%d\t%x\t%x\n", r > -4, r, -4);
     for( r = 1; r > -4; r-- )
         printf("Welcome");
+    
+    return 0;
+}
+
+int q23(void)
+{
+    int a = 0, b = 100;
+    int i = 0;
+    do
+    {
+        --b;
+        a += 2;
+        i++;
+        printf("%d %d %d\n", i, a, b);
+    }while(a < b);
+    printf("%d", a - b);
+
+    return 0;
 }
 
 int main(void)
 {
-    q22();   
+    q23();   
     return 0;
 }
