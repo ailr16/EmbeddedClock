@@ -6,3 +6,8 @@ makefile
 .gdbinit
 .misra
 .msupress
+/CasioCAN/Build
+/CasioCAN/cmsisg0
+/CasioCAN/halg0
+/CasioCAN/app/stm32g0xx_hal_conf.h
+/CasioCAN/.vscode

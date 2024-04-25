@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo ip link set can0 up type can bitrate $1
+ip link show
+read -p "Press any key for continue..."

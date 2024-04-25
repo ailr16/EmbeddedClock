@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ip -det link show can0
+read -p "Press any key for continue..."
